@@ -1,0 +1,37 @@
+---
+- name: Upgrade snapclient
+  hosts: snapclient
+  remote_user: root
+  vars:
+    name_pattern: "{{ 'snapclient_.*_amd64' if ansible_architecture == 'x86_64' else 'snapclient_.*_armhf' if ansible_architecture == 'armv7l' else 'unsupported'}}"
+
+  tasks:
+    - name: get latest releases
+      uri:
+        method: GET
+        url: "https://api.github.com/repos/badaix/snapcast/releases"
+        return_content: yes
+        headers:
+          Accept: application/json
+      register: releases
+    - debug:
+        msg: " Using name pattern :{{ name_pattern }}"
+    - set_fact:
+        release: "{{ releases.json[0].assets | selectattr('browser_download_url', 'search', name_pattern) | first }}"
+    - debug:
+        msg: "{{release}}"
+    - name: download tarball
+      get_url:
+        dest: "/tmp/"
+        url: "{{release.browser_download_url}}"
+    - debug:
+        msg: "/tmp/{{release.name}}"
+    - name: install .deb
+      apt:
+        deb: "/tmp/{{release.name}}"
+    - name: Startd systemd unit
+      systemd:
+        name: snapclient.service
+        enabled: yes
+        state: restarted
+
