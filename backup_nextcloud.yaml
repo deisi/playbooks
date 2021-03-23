@@ -2,7 +2,9 @@
 ---
 - name: Backup Nextcloud
   hosts: nextcloud
-  remote_user: root
+  remote_user: ansible
+  become: yes
+  become_user: root
 
   tasks:
   - name: Set maintanance mode

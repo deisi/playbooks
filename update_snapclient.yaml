@@ -1,7 +1,9 @@
 ---
 - name: Upgrade snapclient
   hosts: snapclient
-  remote_user: root
+  remote_user: ansible
+  become: yes
+  become_user: root
   vars:
     name_pattern: "{{ 'snapclient_.*_amd64' if ansible_architecture == 'x86_64' else 'snapclient_.*_armhf' if ansible_architecture == 'armv7l' else 'unsupported'}}"
 

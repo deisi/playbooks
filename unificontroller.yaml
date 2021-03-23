@@ -1,7 +1,9 @@
 ---
 - name: upgrade unificontroller
   hosts: hassio
-  remote_user: root
+  remote_user: ansible
+  become: yes
+  become_user: root
   tasks:
     - name: Pull new images
       community.general.docker_compose:
