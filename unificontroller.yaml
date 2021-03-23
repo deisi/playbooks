@@ -1,0 +1,13 @@
+---
+- name: upgrade unificontroller
+  hosts: hassio
+  remote_user: root
+  tasks:
+    - name: Pull new images
+      community.general.docker_compose:
+        project_src: /home/malte/unifi-controller
+        pull: true
+    - name: Restart container
+      community.general.docker_compose:
+        project_src: /home/malte/unifi-controller
+        restarted: true

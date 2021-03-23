@@ -1,0 +1,28 @@
+
+---
+- name: Backup Nextcloud
+  hosts: nextcloud
+  remote_user: root
+
+  tasks:
+  - name: Set maintanance mode
+    become: yes
+    become_user: www-data
+    shell: 'php /var/www/nextcloud/occ maintenance:mode --on'
+  - name: backup nextcloud
+    shell: 'rsync -Aavx --delete /var/www/nextcloud/ /home/malte/backups/nextcloud'
+  - name: backup user data
+    shell: 'rsync -Aavx --delete /data/nextcloud/ root@serv:/volume1/timemachine/nextcloud/'
+  - name: backup data base
+    mysql_db:
+      login_user: '{{ lookup("env", "MYSQL_USERNAME")}}'
+      login_password: '{{ lookup("env", "MYSQL_PASSWORD") }}'
+      state: dump
+      name: nextcloud
+      target: /home/malte/backups/nextcloud-database.bak
+  - name: Set maintanance mode off
+    become: yes
+    become_user: www-data
+    shell: php /var/www/nextcloud/occ maintenance:mode --off
+
+
