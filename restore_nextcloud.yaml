@@ -1,0 +1,41 @@
+---
+- name: Restore nextcloud from backup
+  hosts: nextcloud
+  remote_user: ansible
+  become: yes
+  become_user: www-data
+
+  tasks:
+  - name: Activate maintanance mode
+    shell: 'php /var/www/nextcloud/occ maintenance:mode --on'
+  - name: Restore nextcloud
+    shell: 'rsync -Aavx --delete /home/malte/backups/nextcloud/ /var/www/nextcloud/'
+  - name: Restore user data
+    become: yes
+    become_user: root
+    shell: 'rsync -Aavx --delete root@serv:/volume1/timemachine/nextcloud/ /data/nextcloud/'
+  - name: Drop old database
+    mysql_db:
+      login_user: '{{ lookup("env", "MYSQL_USERNAME")}}'
+      login_password: '{{ lookup("env", "MYSQL_PASSWORD") }}'
+      state: absent
+      name: nextcloud
+  - name: Create new database
+    mysql_db:
+      login_user: '{{ lookup("env", "MYSQL_USERNAME")}}'
+      login_password: '{{ lookup("env", "MYSQL_PASSWORD") }}'
+      state: present
+      encoding: utf8mb4
+      collation: utf8mb4_general_ci
+      name: nextcloud
+  - name: Restore database
+    mysql_db:
+      login_user: '{{ lookup("env", "MYSQL_USERNAME")}}'
+      login_password: '{{ lookup("env", "MYSQL_PASSWORD") }}'
+      state: import
+      name: nextcloud
+      encoding: utf8mb4
+      target: /home/malte/backups/nextcloud-database.bak
+  - name: Deactivate maintanance mode
+    shell: php /var/www/nextcloud/occ maintenance:mode --off
+
