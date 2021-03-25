@@ -1,0 +1,15 @@
+
+---
+- name: Portainer service
+  hosts: serv
+  remote_user: ansible
+  become: yes
+  become_user: root
+  tasks:
+    - name: Start portainer service
+      community.docker.docker_compose:
+        project_src: /home/malte/Projects/container/portainer
+        build: no
+        pull: yes
+        state: present
+        restarted: yes
