@@ -1,3 +1,3 @@
 ---
-- import_playbook: update_snapserver.yaml
-- import_playbook: update_snapclient.yaml
+- import_playbook: snapserver.yaml
+- import_playbook: snapclient.yaml
