@@ -1,9 +1,10 @@
 - import_playbook: update_apt.yaml
+- import_playbook: unificontroller.yaml
 - import_playbook: snapcast.yaml
 - import_playbook: spotifyd.yaml
 - import_playbook: ocrmypdf.yaml
 - import_playbook: plex.yaml
 - import_playbook: portainer.yaml
 - import_playbook: tvheadend.yaml
-- import_playbook: unificontroller.yaml
 - import_playbook: youtube-dl.yaml
+- import_playbook: reboot.yaml

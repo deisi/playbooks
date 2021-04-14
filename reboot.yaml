@@ -1,0 +1,12 @@
+---
+# Some servers need to restart after upgrade. Else they might not function correctly.
+# I know this is not the nicest way of doing it, but its the easierst for now as I'm not willing to
+# turn everything up side down just to implement this the "correct" way
+- name: Restart servers
+  hosts: hassio
+  remote_user: ansible
+  become: yes
+  become_user: root
+  tasks:
+  - name: Unconditionally reboot the machine with all defaults
+    reboot:
