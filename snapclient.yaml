@@ -1,5 +1,5 @@
 ---
-- name: Upgrade snapclient
+- name: Run latest snapclient
   hosts: snapclient
   remote_user: ansible
   become: yes

@@ -1,0 +1,30 @@
+---
+- name: Run latest spotifyd
+  hosts: serv
+  remote_user: ansible
+  become: yes
+  become_user: malte
+  tasks:
+    - name: get latest releases
+      uri:
+        url: "https://api.github.com/repos/Spotifyd/spotifyd/releases"
+        return_content: yes
+      register: releases
+    - set_fact:
+        release: "{{ releases.json[0].assets | selectattr('browser_download_url', 'search', 'spotifyd-linux-default.tar.gz') | first }}"
+    - debug:
+        msg: "{{release}}"
+    - name: download tarball
+      get_url:
+        url: "{{release.browser_download_url}}"
+        dest: "/tmp/"
+    - name: Extract tar.gz
+      ansible.builtin.unarchive:
+        src: "/tmp/spotifyd-linux-default.tar.gz"
+        dest: /home/malte/.local/bin/
+    - name: Startd systemd unit
+      systemd:
+        name: spotifyd.service
+        enabled: yes
+        state: restarted
+        scope: user
