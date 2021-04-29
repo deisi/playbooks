@@ -5,3 +5,4 @@
 - import_playbook: portainer.yaml
 - import_playbook: tvheadend.yaml
 - import_playbook: unificontroller.yaml
+- import_playbook: mpd.service

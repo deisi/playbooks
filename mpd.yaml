@@ -1,0 +1,15 @@
+---
+- name: Run mpd service
+  hosts: serv
+  remote_user: ansible
+  become: yes
+  become_user: malte
+  tasks:
+    - name: Startd systemd unit
+      systemd:
+        name: mpd.service
+        enabled: yes
+        scope: user
+        state: restarted
+
+
