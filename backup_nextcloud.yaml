@@ -16,7 +16,7 @@
       name: nextcloud
       target: /home/malte/backups/nextcloud-database.bak
   - name: borg backup
-    shell: 'borg create ::{{ ansible_hostname }}-{{ ansible_date_time.iso8601_basic_short }} /var/www/nextcloud /data/nextcloud/ /home/malte/backups/nextcloud-database.bak'
+    shell: 'borg create --compression lz4 ::{{ ansible_hostname }}-{{ ansible_date_time.iso8601_basic_short }} /var/www/nextcloud /data/nextcloud/ /home/malte/backups/nextcloud-database.bak'
     environment:
       BORG_REPO: '{{ lookup("env", "BORG_SERVER")}}'
       BORG_PASSPHRASE: '{{ lookup("env", "BORG_PASSWORD")}}'
