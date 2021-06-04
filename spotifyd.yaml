@@ -22,6 +22,7 @@
       ansible.builtin.unarchive:
         src: "/tmp/spotifyd-linux-default.tar.gz"
         dest: /home/malte/.local/bin/
+        remote_src: yes
     - name: Startd systemd unit
       systemd:
         name: spotifyd.service
