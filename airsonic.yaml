@@ -1,13 +1,13 @@
 ---
-- name: Ocrmypdf service
+- name: Airsonic service
   hosts: serv
   remote_user: ansible
   become: yes
   become_user: root
   tasks:
-    - name: Start ocrmypdf service
+    - name: Start airsonic service
       community.docker.docker_compose:
-        project_src: /home/malte/Projects/container/ocrmypdf
+        project_src: /home/malte/Projects/container/airsonic
         pull: yes
         state: present
         restarted: yes
