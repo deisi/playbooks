@@ -1,0 +1,25 @@
+---
+- name: Install latest btop++
+  hosts: serv
+  remote_user: ansible
+  become: yes
+  become_user: malte
+  tasks:
+    - name: get latest release
+      uri:         
+        url: "https://github.com/aristocratos/btop/releases"
+        return_content: yes
+      register: releases
+    - set_fact:
+        release: "{{ releases.json[0].assets | selectattr('browser_download_url', 'search', 'btop-x86_64-linux-musl.tbz') | first }}"
+    - debug:
+        msg: "{{release}}"
+    - name: download tarball
+      get_url:
+        url: "{{release.browser_download_url}}"
+        dest: "/tmp/"
+    - name: Extract tar.gz
+      ansible.builtin.unarchive:
+        src: "/tmp/btop-x86_64-linux-musl.tbz"
+        dest: /home/malte/.local/bin/
+        remote_src: yes
