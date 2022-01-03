@@ -7,7 +7,7 @@
   tasks:
     - name: get latest release
       uri:         
-        url: "https://github.com/aristocratos/btop/releases"
+        url: "https://api.github.com/repos/aristocratos/btop/releases"
         return_content: yes
       register: releases
     - set_fact:
