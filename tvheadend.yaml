@@ -8,7 +8,6 @@
     - name: Start tvheadend service
       community.docker.docker_compose:
         project_src: /home/malte/Projects/container/tvheadend
-        build: no
         pull: yes
         state: present
         restarted: yes
