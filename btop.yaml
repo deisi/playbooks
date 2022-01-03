@@ -1,6 +1,6 @@
 ---
 - name: Install latest btop++
-  hosts: serv
+  hosts: gui
   remote_user: ansible
   become: yes
   become_user: malte
